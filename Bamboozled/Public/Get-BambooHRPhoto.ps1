@@ -60,7 +60,7 @@ function Get-BambooHRPhoto {
         $bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
 
         # Attempt to connect to the BambooHR API Service
-        try {   
+ 
             $results = @()
 
             foreach ($id in $employeeID) {
@@ -70,24 +70,25 @@ function Get-BambooHRPhoto {
 
                 Write-Verbose "[PROCESS] Calling web request.." 
                 # Perform the API query
-                $bambooHRPhoto = Invoke-WebRequest $photoUrl -method GET -Credential $bambooHRAuth -Headers @{"accept" = "application/json" } -UseBasicParsing
-
-                Write-Verbose "[PROCESS] Saving photo" 
-                $photo = $bambooHRPhoto.Content | ConvertFrom-Json
-
-                Write-Verbose "[PROCESS] Add photo to results" 
-                $results += [PSCustomObject]@{
-                    employeeID     = $id
-                    thumbnailPhoto = $photo
+                try{
+                    $bambooHRPhoto = Invoke-WebRequest $photoUrl -method GET -Credential $bambooHRAuth -Headers @{"accept" = "application/json" } -UseBasicParsing
+                    Write-Verbose "[PROCESS] Saving photo" 
+                    $photo = $bambooHRPhoto.Content | ConvertFrom-Json
+    
+                    Write-Verbose "[PROCESS] Add photo to results" 
+                    $results += [PSCustomObject]@{
+                        employeeID     = $id
+                        thumbnailPhoto = $photo
+                    }
+                }
+                catch {
+                    Write-Error "Failed to download user details for user $id."
                 }
             }
 
             $results
         }
         # If the above failed, throw an error
-        catch {
-            throw "Failed to download user details."
-        }
-    }
+    
     END { }
 }
