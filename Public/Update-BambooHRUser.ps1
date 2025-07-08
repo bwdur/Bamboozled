@@ -57,7 +57,9 @@ function Update-BambooHRUser {
 
     # Build a BambooHR credential object using the provided API key
     $bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
-
+    $headers=@{} 
+    $headers.Add("accept", "application/json")
+    $headers.Add("authorization", "Basic $bambooHRAuth") 
     # API endpoint URL
     $userUrl = "https://api.bamboohr.com/api/gateway.php/{0}/v1/employees/{1}" -f $subDomain,$employeeID
 
@@ -65,7 +67,7 @@ function Update-BambooHRUser {
     try
     {
         # Perform the API query
-        $updateUser = Invoke-WebRequest $userUrl -method POST -Credential $bambooHRAuth -body $query -Headers @{"accept"="application/json"} -UseBasicParsing
+        $updateUser = Invoke-WebRequest $userUrl -method POST -body $query -Headers $headers -UseBasicParsing
     }
     catch
     {

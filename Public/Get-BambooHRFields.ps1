@@ -16,12 +16,14 @@ function Get-BambooHRFields {
 
     # Build a BambooHR credential object using the provided API key
     $bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
-
+    $headers=@{} 
+    $headers.Add("accept", "application/json")
+    $headers.Add("authorization", "Basic $bambooHRAuth")
     # Attempt to connect to the BambooHR API Service
     try
     {
         # Perform the API query
-        $bambooHRFields = Invoke-WebRequest $fieldsUrl -method GET -Credential $bambooHRAuth -Headers @{"accept"="application/json"} -UseBasicParsing
+        $bambooHRFields = Invoke-WebRequest $fieldsUrl -method GET -Headers $headers -UseBasicParsing
 
         # Convert the output to a PowerShell object
         $bambooHRFields = $bambooHRFields.Content | ConvertFrom-Json

@@ -72,7 +72,7 @@ function Get-BambooHRDirectory {
     {
         $headers=@{} 
         $headers.Add("accept", "application/json")
-        $headers.Add("authorization", "Basic $apiKey") 
+        $headers.Add("authorization", "Basic $bambooHRAuth")
         # Perform the API query
         $bambooHRDirectory = Invoke-WebRequest $directoryUrl -method POST -body $query -Headers $headers -UseBasicParsing
 

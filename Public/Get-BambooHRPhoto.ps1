@@ -57,11 +57,11 @@ function Get-BambooHRPhoto {
     }
     PROCESS {
         # Build a BambooHR credential object using the provided API key
-        #$bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
+        $bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
 
         $headers=@{} 
         $headers.Add("accept", "application/json")
-        $headers.Add("authorization", "Basic $apiKey") 
+        $headers.Add("authorization", "Basic $bambooHRAuth") 
 
         # Attempt to connect to the BambooHR API Service
  

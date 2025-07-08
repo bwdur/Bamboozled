@@ -7,8 +7,8 @@ function Get-BambooHRAuth {
         [Parameter(Mandatory=$true,Position=0)]$ApiKey
     )
 
-    $apiPassword = ConvertTo-SecureString 'x' -AsPlainText -Force
-    $bambooHRAuth = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $apiKey, $apipassword
-
-    Return $bambooHRAuth
+    $token = $apikey + ":" + "x"
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($token)
+    $base64 = [System.Convert]::ToBase64String($bytes)
+    Return $base64
 }
