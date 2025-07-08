@@ -63,15 +63,18 @@ function Get-BambooHRDirectory {
 
     # API endpoint URL
     $directoryUrl = "https://api.bamboohr.com/api/gateway.php/{0}/v1/reports/custom?format=json" -f $subDomain
-
+    
     # Build a BambooHR credential object using the provided API key
     $bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
 
     # Attempt to connect to the BambooHR API Service
     try
     {
+        $headers=@{} 
+        $headers.Add("accept", "application/json")
+        $headers.Add("authorization", "Basic $apiKey") 
         # Perform the API query
-        $bambooHRDirectory = Invoke-WebRequest $directoryUrl -method POST -Credential $bambooHRAuth -body $query -UseBasicParsing
+        $bambooHRDirectory = Invoke-WebRequest $directoryUrl -method POST -body $query -Headers $headers -UseBasicParsing
 
         # Convert the output to a PowerShell object
         $bambooHRDirectory = $bambooHRDirectory.Content | ConvertFrom-Json

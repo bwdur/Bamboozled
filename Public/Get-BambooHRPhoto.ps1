@@ -57,7 +57,11 @@ function Get-BambooHRPhoto {
     }
     PROCESS {
         # Build a BambooHR credential object using the provided API key
-        $bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
+        #$bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
+
+        $headers=@{} 
+        $headers.Add("accept", "application/json")
+        $headers.Add("authorization", "Basic $apiKey") 
 
         # Attempt to connect to the BambooHR API Service
  
@@ -71,7 +75,7 @@ function Get-BambooHRPhoto {
                 Write-Verbose "[PROCESS] Calling web request.." 
                 # Perform the API query
                 try{
-                    $bambooHRPhoto = Invoke-WebRequest $photoUrl -method GET -Credential $bambooHRAuth -Headers @{"accept" = "application/json" } -UseBasicParsing
+                    $bambooHRPhoto = Invoke-WebRequest $photoUrl -method GET -Headers $headers -UseBasicParsing
                     Write-Verbose "[PROCESS] Saving photo" 
                     $photo = $bambooHRPhoto.Content | ConvertFrom-Json
     

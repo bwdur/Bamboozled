@@ -15,13 +15,17 @@ function Get-BambooHRListDetails {
     $fieldsUrl = "https://api.bamboohr.com/api/gateway.php/{0}/v1/meta/lists/" -f $subDomain
 
     # Build a BambooHR credential object using the provided API key
-    $bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
+    #$bambooHRAuth = Get-BambooHRAuth -ApiKey $apiKey
+
+    $headers=@{} 
+    $headers.Add("accept", "application/json")
+    $headers.Add("authorization", "Basic $apiKey") 
 
     # Attempt to connect to the BambooHR API Service
     try
     {
         # Perform the API query
-        $bambooHRListDetails = Invoke-WebRequest $fieldsUrl -method GET -Credential $bambooHRAuth -Headers @{"accept"="application/json"} -UseBasicParsing
+        $bambooHRListDetails = Invoke-WebRequest $fieldsUrl -method GET -Credential $bambooHRAuth -Headers $headers -UseBasicParsing
 
         # Convert the output to a PowerShell object
         $bambooHRListDetails = $bambooHRListDetails.Content | ConvertFrom-Json
