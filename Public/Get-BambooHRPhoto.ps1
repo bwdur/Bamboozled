@@ -82,7 +82,7 @@ function Get-BambooHRPhoto {
                     Write-Verbose "[PROCESS] Add photo to results" 
                     $results += [PSCustomObject]@{
                         employeeID     = $id
-                        thumbnailPhoto = $photo
+                        thumbnailPhoto = [System.Convert]::FromBase64String($photo.fileBase64)
                     }
                 }
                 catch {
